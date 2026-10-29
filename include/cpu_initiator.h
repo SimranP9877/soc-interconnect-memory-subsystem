@@ -12,10 +12,6 @@ using namespace std;
 
 class CPU : public sc_module
 {
-private:
-    unsigned int address {0x10};
-    unsigned int data;
-
 public:
     tlm_utils::simple_initiator_socket<CPU> socket;
 
@@ -26,8 +22,8 @@ public:
 
     void run_read_write_test(); 
 
-    void transaction_for_write();
-    void transaction_for_read();
+    void transaction_for_write(int address, int d_len ,tlm::tlm_command cmd);
+    void transaction_for_read(int address,int d_len ,unsigned char* value);
 };
 
 

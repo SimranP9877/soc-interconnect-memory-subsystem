@@ -12,6 +12,12 @@ void Memory::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 	unsigned char* ptr   = trans.get_data_ptr();
 	unsigned int   len   = trans.get_data_length();
 
+    if(len == 0  || len > SIZE )
+	{
+		trans.set_response_status(tlm::TLM_BURST_ERROR_RESPONSE);
+		return ;
+	}
+
 	if(ptr == nullptr || adr >= SIZE || len > SIZE- adr)
 	{
 		trans.set_response_status(tlm::TLM_ADDRESS_ERROR_RESPONSE);
@@ -20,23 +26,19 @@ void Memory::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 
 	if(cmd == tlm::TLM_WRITE_COMMAND)
 	{
-		memcpy(&mem[adr],ptr,len);
-		std::cout<<sc_time_stamp()<<"Memory : Write  transaction received at address "<<adr;
-		std::cout<<"\n";
+		std::memcpy(&mem[adr],ptr,len);	
+		std::cout<<sc_time_stamp()<<"Memory : Write  transaction received at address "<<adr<<"\n";
 	}
-
 	else if(cmd == tlm::TLM_READ_COMMAND)
 	{
-		memcpy(ptr, &mem[adr], len);
-		std::cout<<sc_time_stamp()<<"Memory "<<"Read transcation received"<<"\n";
-		//std::cout<< sc_time_stamp()<< " Memory: Read address" << adr <<" = " << mem[adr] <<"received";
-		//std::cout<<"\n";
+		std::memcpy(ptr, &mem[adr], len);	
+		std::cout<<sc_time_stamp()<<"Memory : Read  transaction received at address "<<adr<<"\n";
 	}
 	else
 	{
 		trans.set_response_status(tlm::TLM_COMMAND_ERROR_RESPONSE);
 		return;
 	}
-
+			
 	trans.set_response_status(tlm::TLM_OK_RESPONSE);
 }
