@@ -21,7 +21,7 @@ private:
 	unsigned char mem[SIZE]{};
 
 public:
-	tlm_utils::simple_target_socket<Memory>socket;
+	tlm_utils::simple_target_socket<Memory>mem_target_sckt;
 
 public:
 	SC_HAS_PROCESS(Memory);

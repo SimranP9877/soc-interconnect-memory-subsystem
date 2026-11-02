@@ -14,6 +14,7 @@ find_package(SystemCLanguage CONFIG REQUIRED
 add_executable(soc-interconnect-memory-subsystem
     src/sc_main.cpp
     src/cpu_initiator.cpp
+    src/bus_interconnect.cpp
     src/memory_target.cpp
     tests/tests_read_write.cpp
 )

@@ -1,8 +1,8 @@
 #include "memory_target.h"
 
-Memory::Memory(sc_module_name name) :sc_module (name),socket("socket")
+Memory::Memory(sc_module_name name) :sc_module (name),mem_target_sckt("mem_target_sckt")
 {
-	socket.register_b_transport(this, &Memory::b_transport);
+	mem_target_sckt.register_b_transport(this, &Memory::b_transport);
 }
 
 void Memory::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)

@@ -1,21 +1,24 @@
 #include <systemc.h>
 #include "cpu_initiator.h"
 #include "memory_target.h"
+#include "bus_interconnect.h"
 
 
 class Top : public sc_module
 {
 public:
 	CPU initiator;
-	Memory memory;
+	BusInterconnect interconnect;
+	Memory target;
 
 public:
 	SC_HAS_PROCESS(Top);
 
-	Top(sc_module_name name):sc_module(name),initiator("initiator"),memory("memory")
-	{
-		//bind
-		initiator.socket.bind(memory.socket);
+	Top(sc_module_name name):sc_module(name),initiator("initiator"),interconnect("interconnect"),target("target")
+   	{
+	   	//bind
+	   	initiator.cpu_init_sckt.bind(interconnect.m_bus_target_sckt);
+	   	interconnect.m_bus_init_sckt.bind(target.mem_target_sckt);
 	}
 };
 

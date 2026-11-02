@@ -13,7 +13,7 @@ using namespace std;
 class CPU : public sc_module
 {
 public:
-    tlm_utils::simple_initiator_socket<CPU> socket;
+    tlm_utils::simple_initiator_socket<CPU> cpu_init_sckt;
 
 public:
     SC_HAS_PROCESS(CPU);
