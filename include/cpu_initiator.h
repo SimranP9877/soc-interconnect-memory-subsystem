@@ -23,7 +23,7 @@ public:
     void run_read_write_test(); 
 
     void transaction_for_write(int address, int d_len ,tlm::tlm_command cmd);
-    void transaction_for_read(int address,int d_len ,unsigned char* value);
+    void transaction_for_read(int address,int d_len ,unsigned char* value,tlm::tlm_command cmd);
 };
 
 

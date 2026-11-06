@@ -10,33 +10,48 @@ void CPU::run_read_write_test()
     transaction_for_write(0x20,1,tlm::TLM_WRITE_COMMAND);
     std::cout<<"\n"<<"\n";
 
-    transaction_for_read(0x20,1,value1);
+    transaction_for_read(0x20,1,value1,tlm::TLM_READ_COMMAND);
+    std::cout<<"\n"<<"\n";
+    
+    transaction_for_write(0x0120,1,tlm::TLM_WRITE_COMMAND);
     std::cout<<"\n"<<"\n";
 
-    transaction_for_read(0x100,1,value1);
-    std::cout<<"\n"<<"\n";
-    
-    transaction_for_write(0x20,2,tlm::TLM_WRITE_COMMAND);
+    transaction_for_read(0x0120,1,value1,tlm::TLM_READ_COMMAND);
     std::cout<<"\n"<<"\n";
 
-    transaction_for_read(0x20,2,value2);
+    transaction_for_write(0x0200,2,tlm::TLM_WRITE_COMMAND);
     std::cout<<"\n"<<"\n";
     
-    transaction_for_write(0x40,4,tlm::TLM_WRITE_COMMAND);
+    transaction_for_write(0x1FE,4,tlm::TLM_WRITE_COMMAND);
     std::cout<<"\n"<<"\n";
     
-    transaction_for_read(0x40,4,value3);
+    transaction_for_write(0x00FF,1,tlm::TLM_WRITE_COMMAND);
     std::cout<<"\n"<<"\n";
-    
+
+    transaction_for_read(0x00FF,1,value1,tlm::TLM_READ_COMMAND);
+    std::cout<<"\n"<<"\n";
+
+    transaction_for_write(0x01FF,2,tlm::TLM_WRITE_COMMAND);  //invalid as we have 256bytes and 4byte needs to be allocated from 254.
+    std::cout<<"\n"<<"\n"; 
+
     transaction_for_write(0xFE,4,tlm::TLM_WRITE_COMMAND);  //invalid as we have 256bytes and 4byte needs to be allocated from 254.
     std::cout<<"\n"<<"\n"; 
     
-    transaction_for_read(0x10,0,value3);
+    transaction_for_read(0x10,0,value3,tlm::TLM_READ_COMMAND);
     std::cout<<"\n"<<"\n";
     
     transaction_for_write(0xFA,1,tlm::TLM_IGNORE_COMMAND);
     std::cout<<"\n"<<"\n";
-        
+
+    transaction_for_write(0x40,4,tlm::TLM_WRITE_COMMAND);
+    std::cout<<"\n"<<"\n";
+
+    transaction_for_read(0x40,4,value3,tlm::TLM_READ_COMMAND);
+    std::cout<<"\n"<<"\n";
+
+    transaction_for_write(0xFA,1,tlm::TLM_IGNORE_COMMAND); //mile2 test case
+    std::cout<<"\n"<<"\n";
+    
 }
 
 void CPU::transaction_for_write(int address, int d_len ,tlm::tlm_command cmd)
@@ -70,7 +85,7 @@ void CPU::transaction_for_write(int address, int d_len ,tlm::tlm_command cmd)
 }
 
 
-void CPU::transaction_for_read(int address, int d_len ,unsigned char* value)
+void CPU::transaction_for_read(int address, int d_len ,unsigned char* value,tlm::tlm_command cmd)
 {
     unsigned char data[d_len]{};
 
@@ -101,7 +116,11 @@ void CPU::transaction_for_read(int address, int d_len ,unsigned char* value)
     }
     else
     {
-        std::cout<< "CPU : data verification failed"<<"\n";
+        for (int i = 0; i < d_len; i++) std::cout << static_cast<int>(data[i]) << ";";
+        std::cout << " || ";
+        for (int i = 0; i < d_len; i++) std::cout << static_cast<int>(value[i]) << ";";
+        std::cout << "\n";
+        SC_REPORT_ERROR("TLM-2", "data verification failed");
     }
 
 

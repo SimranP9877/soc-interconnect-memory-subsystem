@@ -32,7 +32,7 @@ void Memory::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 	else if(cmd == tlm::TLM_READ_COMMAND)
 	{
 		std::memcpy(ptr, &mem[adr], len);	
-		std::cout<<sc_time_stamp()<<"Memory : Read  transaction received at address "<<adr<<"\n";
+		std::cout<<sc_time_stamp()<<"Memory : Read  transaction received at address "<<"\n";
 	}
 	else
 	{
