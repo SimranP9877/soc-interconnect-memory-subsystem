@@ -71,16 +71,21 @@ void CPU::transaction_for_write(int address, int d_len ,tlm::tlm_command cmd)
     trans.set_address(address);
     trans.set_data_ptr(data);
     trans.set_data_length(sizeof(data));
+    trans.set_response_status( tlm::TLM_INCOMPLETE_RESPONSE );
 
     std::cout<<sc_time_stamp()<<"CPU:  write "<< sizeof(data) << "byte at "<< address <<"\n";
 
     cpu_init_sckt->b_transport(trans,delay);
+
+    std::cout<<"CPU: Annotated delay = "<< delay<<"\n";
 
     if(trans.is_response_error()) 
     {
         std::string error_msg = "Transaction failed with status: " + std::string(trans.get_response_string());
         std::cout<<"CPU :" << error_msg.c_str()<<"\n";
     }
+
+    wait(delay);
 
 }
 
@@ -96,15 +101,20 @@ void CPU::transaction_for_read(int address, int d_len ,unsigned char* value,tlm:
     trans.set_address(address);
     trans.set_data_ptr(data);
     trans.set_data_length(sizeof(data));
+    trans.set_response_status( tlm::TLM_INCOMPLETE_RESPONSE );
 
     std::cout<<sc_time_stamp()<<"CPU:  Read  "<<sizeof(data) <<"byte at "<< address<<"\n";
     cpu_init_sckt->b_transport(trans,delay);
+
+    std::cout<<" CPU: Annotated delay = "<< delay<<"\n";
 
     if (trans.is_response_error())
     {
         std::string error_msg = "Transaction failed with status: " + std::string(trans.get_response_string());
         std::cout<<"CPU :" << error_msg.c_str()<<"\n";
     } 
+
+    wait(delay);
     
     if(d_len == 0 )
     {

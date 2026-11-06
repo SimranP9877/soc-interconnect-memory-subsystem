@@ -27,12 +27,15 @@ void Memory::b_transport(tlm::tlm_generic_payload& trans, sc_time& delay)
 	if(cmd == tlm::TLM_WRITE_COMMAND)
 	{
 		std::memcpy(&mem[adr],ptr,len);	
-		std::cout<<sc_time_stamp()<<"Memory : Write  transaction received at address "<<adr<<"\n";
+		delay += sc_time(30,SC_NS) ;
+		std::cout<<"Memory : Write  transaction received  "<<"\n";
 	}
 	else if(cmd == tlm::TLM_READ_COMMAND)
 	{
 		std::memcpy(ptr, &mem[adr], len);	
-		std::cout<<sc_time_stamp()<<"Memory : Read  transaction received at address "<<"\n";
+		delay +=sc_time(20,SC_NS);
+       	std::cout<< "Memory: Read  received" <<"\n";
+                 
 	}
 	else
 	{

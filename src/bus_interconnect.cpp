@@ -27,6 +27,7 @@ void BusInterconnect::b_transport(tlm::tlm_generic_payload& trans, sc_time& dela
     std::cout<<"BUS: Address mapped to memory 1"<<"\n";
     trans.set_address(adr - 0x0100);
     m_bus_init_sckt1->b_transport(trans,delay);
+    trans.set_address(adr + 0x0100);
   }
   else
   {
